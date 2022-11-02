@@ -54,7 +54,6 @@ class MyListener(val customerRepository: CustomerRepository) : ApplicationListen
 }
 
 
-@Serializable
 data class Customer(@Id val id: Int?, val name: String)
 
 interface CustomerRepository : CoroutineCrudRepository<Customer, Int>
@@ -65,12 +64,6 @@ class MyHints : RuntimeHintsRegistrar {
     override fun registerHints(hints: RuntimeHints, classLoader: ClassLoader?) {
         listOf(Customer::class.java, Array<Instant>::class.java, Array<ZonedDateTime>::class.java).forEach {
             hints.reflection().registerType(it, *MemberCategory.values())
-        }
-
-
-        listOf(CustomerRepository::class.java, CoroutineCrudRepository::class.java).forEach {
-            hints.reflection().registerType(it, MemberCategory.INTROSPECT_DECLARED_METHODS)
-            hints.proxies().registerJdkProxy(it)
         }
      }
 }
