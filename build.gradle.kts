@@ -11,7 +11,6 @@ plugins {
 
 group = "org.test"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
 	mavenCentral()
@@ -44,3 +43,25 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
+
+java {
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(17))
+		vendor.set(JvmVendorSpec.GRAAL_VM)
+	}
+}
+
+
+tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootBuildImage> {
+	environment.put("BP_NATIVE_IMAGE_BUILD_ARGUMENTS","--initialize-at-build-time=ch.qos.logback")
+
+}
+
+
+//springBoot {
+//	buildInfo {
+//		properties {
+//			additional.set(mapOf("BP_NATIVE_IMAGE_BUILD_ARGUMENTS" to "--initialize-at-build-time=ch.qos.logback.classic.Logger"))
+//		}
+//	}
+//}

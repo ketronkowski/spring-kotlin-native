@@ -1,0 +1,29 @@
+name: Code Test
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  test:
+    name: Code Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🐙 Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🧱 Build Image
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: bootBuildImage
